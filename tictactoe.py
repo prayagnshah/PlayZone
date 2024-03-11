@@ -4,7 +4,7 @@
 class Game:
     def __init__(self):
         self.board = [
-            "  " for i in range(9)
+            "  " for i in range(10)
         ]  # Initialize the board with 9 empty spaces
         self.winner = None
 
@@ -16,18 +16,18 @@ class Game:
 
     def make_move(self, player):
         self.print_board()
-        position = int(input(f"Player {player} enter a position (0-8): "))
+        position = int(input(f"Player {player} enter a position (1-9): "))
 
-        if position < 0 or position > 8:
+        if position < 1 or position > 9:
             print("Invalid position. Try again.")
             return self.make_move(player)
 
-        elif self.board[position] != "  ":
+        elif self.board[position - 1] != "  ":
             print("This position is already taken. Try again.")
             return self.make_move(player)
 
         else:
-            self.board[position] = player
+            self.board[position - 1] = player
 
             if self.check_winner(player):
                 print(f"Player {player} wins!")
@@ -42,20 +42,22 @@ class Game:
 
     def check_winner(self, player):
         # Check rows
-        for i in range(0, 9, 3):
+        for i in range(0, 7, 3):
             if all(self.board[i + j] == player for j in range(3)):
                 return True
 
         # Check columns
         for i in range(3):
             if all(self.board[i + j * 3] == player for j in range(3)):
-                return False
+                return True
 
         # Check diagonals
         if all(self.board[i] == player for i in (0, 4, 8)):
             return True
         if all(self.board[i] == player for i in (2, 4, 6)):
             return True
+
+        return False
 
 
 my_game = Game()
@@ -67,3 +69,6 @@ while not my_game.winner:
     if my_game.winner:
         break
     my_game.make_move("O")
+
+    if my_game.winner:
+        break
